@@ -223,6 +223,12 @@ static void log_buffer_notrunc(const uint8_t *buf, uintptr_t length)
     bson_init(&b);
     bson_append_string(&b, "type", "buffer");
 
+    /* first log buffer meta-data */
+    bson_append_int(&b,"p",get_current_process_id());
+    bson_append_long(&b,"a",(uintptr_t)buf);
+    bson_append_long(&b,"s",length);
+
+
     if(range_is_readable(buf, length) != 0) {
         bson_append_binary(&b, "buffer", BSON_BIN_BINARY,
             (const char *) buf, length);
